@@ -17,21 +17,75 @@
           height="24"
           width="32"
         />
+        <div
+          class="credit-card-text font-weight-medium"
+          style="position: absolute; font-size: 18px; top: 79px; left: 20px"
+        >
+          {{ cardNumber }}
+        </div>
+        <div
+          class="text-uppercase text-body-2 font-weight-medium credit-card-text"
+          style="position: absolute; bottom: 20px; left: 20px"
+        >
+          {{ fullName }}
+        </div>
+        <div
+          class="d-flex flex-column justify-center align-center credit-card-text"
+          style="position: absolute; bottom: 20px; left: 250px"
+        >
+          <div class="text-caption">EXPIRY</div>
+          <div class="text-body-2 font-weight-medium">
+            {{ expirationDate }}
+          </div>
+        </div>
       </div>
-      <v-img
-        alt="credit card back image"
-        class="credit-card credit-card-back"
-        :src="require('../../assets/credit-card-back.png')"
-        height="186"
-        width="328"
-      />
+      <div class="credit-card-back-container">
+        <v-img
+          alt="credit card back image"
+          class="credit-card credit-card-back"
+          :src="require('../../assets/credit-card-back.png')"
+          height="186"
+          width="328"
+        />
+        <div
+          class="credit-card-text"
+          style="position: absolute; top: 126px; left: 352px"
+        >
+          <div class="text-caption">CVV</div>
+          <div class="text-body-2 font-weight-medium">{{ cvv }}</div>
+        </div>
+      </div>
     </div>
   </v-container>
 </template>
 
 <script>
+import { eventBus } from "@/main";
 export default {
-  data: () => ({}),
+  data: () => ({
+    cardNumber: "1234 1234 1234 1234",
+    expirationDate: "MM / YY",
+    cvv: "123",
+    fullName: "YOUR NAME",
+  }),
+
+  created() {
+    eventBus.$on("userForm", (data) => {
+      this.cardNumber = data.cardNumber.length
+        ? data.cardNumber
+        : "1234 1234 1234 1234";
+      this.expirationDate = data.expirationDate.length
+        ? data.expirationDate
+        : "MM / YY";
+      this.cvv = data.cvv.length ? data.cvv : "123";
+      const fullName = data.firstName + " " + data.lastName;
+      this.fullName = fullName.length > 1 ? fullName : "YOUR NAME";
+    });
+  },
+
+  beforeDestroy() {
+    eventBus.$off("userForm");
+  },
 };
 </script>
 
@@ -61,9 +115,18 @@ export default {
   z-index: 2;
 }
 
+.credit-card-back-container {
+  position: relative;
+  top: -198px;
+}
+
 .credit-card-back {
   position: absolute;
   top: 0;
   left: 72px;
+}
+
+.credit-card-text {
+  color: #ffffff;
 }
 </style>
