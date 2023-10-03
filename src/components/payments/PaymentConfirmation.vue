@@ -34,7 +34,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-btn dark color="kinTeal" @click="returnHome"
+        <v-btn dark color="kinTeal" elevation="0" @click="returnHome"
           >View Transaction Details</v-btn
         >
       </v-col>

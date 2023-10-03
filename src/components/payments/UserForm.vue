@@ -11,23 +11,26 @@
             persistent-placeholder
             color="kinTeal"
             :rules="[rules.cardNumber, validateCreditCardNumber, luhnAlgorithm]"
-            :maxlength="creditCardFormat === 1 ? 19 : 17"
+            :maxlength="$store.getters.getCreditCardFormat === 1 ? 19 : 17"
             validate-on-blur
             @keydown="isNumber($event)"
           >
-            <template #append v-if="creditCardType !== 'other'">
-              <!-- <transition name="fade" mode="out-in"> -->
+            <template
+              #append
+              v-if="$store.getters.getCreditCardType !== 'other'"
+            >
               <v-fade-transition hide-on-leave mode="out-in">
                 <div style="width: 32px">
                   <v-img
                     style="margin: auto 0"
                     max-height="24"
                     max-width="32"
-                    :src="require(`../../assets/${creditCardType}.png`)"
+                    :src="
+                      require(`../../assets/${$store.getters.getCreditCardType}.png`)
+                    "
                   />
                 </div>
               </v-fade-transition>
-              <!-- </transition> -->
             </template>
           </v-text-field>
           <v-tooltip top>
@@ -40,7 +43,12 @@
                 >mdi-information-outline</v-icon
               >
             </template>
-            <div v-if="creditCardFormat === 1 && cardNumber.length === 0">
+            <div
+              v-if="
+                $store.getters.getCreditCardFormat === 1 &&
+                cardNumber.length === 0
+              "
+            >
               <div>
                 <div>For Visa, MasterCard and Discover,</div>
                 <div>
@@ -56,14 +64,18 @@
                 </div>
               </div>
             </div>
-            <div v-if="creditCardFormat === 1 && cardNumber.length">
+            <div
+              v-if="
+                $store.getters.getCreditCardFormat === 1 && cardNumber.length
+              "
+            >
               <div>For Visa, MasterCard and Discover,</div>
               <div>
                 the <span class="font-weight-bold">16 digits</span> on the front
                 of your card.
               </div>
             </div>
-            <div v-if="creditCardFormat === 2">
+            <div v-if="$store.getters.getCreditCardFormat === 2">
               <div>For American Express,</div>
               <div>
                 the <span class="font-weight-bold">15 digits</span> on the front
@@ -91,11 +103,13 @@
             ref="cvv"
             v-model="cvv"
             label="CVV"
-            :placeholder="creditCardFormat === 1 ? '123' : '1234'"
+            :placeholder="
+              $store.getters.getCreditCardFormat === 1 ? '123' : '1234'
+            "
             persistent-placeholder
             color="kinTeal"
             :rules="[rules.cvv, validateCVV]"
-            :maxlength="creditCardFormat === 1 ? 3 : 4"
+            :maxlength="$store.getters.getCreditCardFormat === 1 ? 3 : 4"
             validate-on-blur
             @keydown="isNumber($event)"
           ></v-text-field>
@@ -109,7 +123,12 @@
                 >mdi-information-outline</v-icon
               >
             </template>
-            <div v-if="creditCardFormat === 1 && cardNumber.length === 0">
+            <div
+              v-if="
+                $store.getters.getCreditCardFormat === 1 &&
+                cardNumber.length === 0
+              "
+            >
               <div>
                 <div>For Visa, MasterCard and Discover,</div>
                 <div>
@@ -126,11 +145,15 @@
                 </div>
               </div>
             </div>
-            <div v-if="creditCardFormat === 1 && cardNumber.length">
+            <div
+              v-if="
+                $store.getters.getCreditCardFormat === 1 && cardNumber.length
+              "
+            >
               The <span class="font-weight-bold">3 digits</span> on the
               <span class="font-italic">back</span> of your card.
             </div>
-            <div v-if="creditCardFormat === 2">
+            <div v-if="$store.getters.getCreditCardFormat === 2">
               The <span class="font-weight-bold">4 digits</span> on the
               <span class="font-italic">front</span> of your card.
             </div>
@@ -187,7 +210,10 @@
               >
             </template>
             <div>
-              <div>Enter the 5 or 9 digit zip code for</div>
+              <div>
+                Enter the <span class="font-weight-bold">5 or 9 digit</span> zip
+                code for
+              </div>
               <div>your credit card's billing address.</div>
             </div>
           </v-tooltip>
@@ -210,6 +236,7 @@
               !zipCode ||
               $store.getters.isSubmitCreditCardDataLoading
             "
+            elevation="0"
             style="color: #ffffff"
           >
             <span v-if="!$store.getters.isSubmitCreditCardDataLoading">
@@ -226,8 +253,6 @@
 </template>
 
 <script>
-import { eventBus } from "@/main";
-
 export default {
   data: () => ({
     loading: false,
@@ -285,7 +310,7 @@ export default {
   watch: {
     form() {
       this.$store.dispatch("updateForm", this.form);
-      eventBus.$emit("userForm", this.formattedForm);
+      this.$store.dispatch("updateFormattedForm", this.formattedForm);
 
       this.formHasErrors = false;
       let validate = {
@@ -377,31 +402,41 @@ export default {
       const discover = ["60", "64", "65", "622"];
 
       if (cardNumber.substring(0, 1) === "4") {
-        this.creditCardType = "visa";
-        this.creditCardFormat = 1;
+        // this.creditCardType = "visa";
+        // this.creditCardFormat = 1;
+        this.$store.dispatch("updateCreditCardType", "visa");
+        this.$store.dispatch("updateCreditCardFormat", 1);
       } else if (
         cardNumber.substring(0, 2) === "34" ||
         cardNumber.substring(0, 2) === "37"
       ) {
-        this.creditCardType = "amex";
-        this.creditCardFormat = 2;
+        // this.creditCardType = "amex";
+        // this.creditCardFormat = 2;
+        this.$store.dispatch("updateCreditCardType", "amex");
+        this.$store.dispatch("updateCreditCardFormat", 2);
       } else if (mastercard.includes(cardNumber.substring(0, 2))) {
-        this.creditCardType = "mastercard";
-        this.creditCardFormat = 1;
+        // this.creditCardType = "mastercard";
+        // this.creditCardFormat = 1;
+        this.$store.dispatch("updateCreditCardType", "mastercard");
+        this.$store.dispatch("updateCreditCardFormat", 1);
       } else if (
         discover.includes(cardNumber.substring(0, 2)) ||
         cardNumber.substring(0, 3) === "622"
       ) {
-        this.creditCardType = "discover";
-        this.creditCardFormat = 1;
+        // this.creditCardType = "discover";
+        // this.creditCardFormat = 1;
+        this.$store.dispatch("updateCreditCardType", "discover");
+        this.$store.dispatch("updateCreditCardFormat", 1);
       } else {
-        this.creditCardType = "other";
-        this.creditCardFormat = 1;
+        // this.creditCardType = "other";
+        // this.creditCardFormat = 1;
+        this.$store.dispatch("updateCreditCardType", "other");
+        this.$store.dispatch("updateCreditCardFormat", 1);
       }
     },
 
     formatCreditCardNumber(cardNumber) {
-      if (this.creditCardFormat === 1) {
+      if (this.$store.getters.getCreditCardFormat === 1) {
         const first = cardNumber.substring(0, 4);
         const second = cardNumber.substring(4, 8);
         const third = cardNumber.substring(8, 12);
@@ -415,7 +450,7 @@ export default {
         } else if (cardNumber.length > 0) {
           this.cardNumber = `${first}`;
         }
-      } else if (this.creditCardFormat === 2) {
+      } else if (this.$store.getters.getCreditCardFormat === 2) {
         const first = cardNumber.substring(0, 4);
         const second = cardNumber.substring(4, 10);
         const third = cardNumber.substring(10, 15);
@@ -470,13 +505,13 @@ export default {
     },
 
     validateCreditCardNumber(value) {
-      if (this.creditCardFormat === 1) {
+      if (this.$store.getters.getCreditCardFormat === 1) {
         if (value.length === 19) {
           return true;
         } else {
           return "Credit card number must be 16 digits";
         }
-      } else if (this.creditCardFormat === 2) {
+      } else if (this.$store.getters.getCreditCardFormat === 2) {
         if (value.length === 17) {
           return true;
         } else {
@@ -510,13 +545,13 @@ export default {
     },
 
     validateCVV(value) {
-      if (this.creditCardFormat === 1) {
+      if (this.$store.getters.getCreditCardFormat === 1) {
         if (value.length === 3) {
           return true;
         } else {
           return "Enter a valid CVV";
         }
-      } else if (this.creditCardFormat === 2) {
+      } else if (this.$store.getters.getCreditCardFormat === 2) {
         if (value.length === 4) {
           return true;
         } else {

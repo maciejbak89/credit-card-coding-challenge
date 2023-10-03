@@ -8,6 +8,9 @@ export default new Vuex.Store({
   state: {
     isThemeDark: localStorage.getItem("isThemeDark") || false,
     formData: {},
+    formattedFormData: {},
+    creditCardType: "other",
+    creditCardFormat: 1,
     isSubmitCreditCardDataLoading: false,
     isSubmitCreditCardDataSuccess: false,
     isSubmitCreditCardDataError: false,
@@ -15,6 +18,9 @@ export default new Vuex.Store({
   },
   getters: {
     getFormData: (state) => state.formData,
+    getFormattedFormData: (state) => state.formattedFormData,
+    getCreditCardType: (state) => state.creditCardType,
+    getCreditCardFormat: (state) => state.creditCardFormat,
     getSubmissionResponse: (state) => state.submissionResponse,
     isSubmitCreditCardDataLoading: (state) =>
       state.isSubmitCreditCardDataLoading,
@@ -27,7 +33,16 @@ export default new Vuex.Store({
       state.isThemeDark = payload;
     },
     setFormData(state, payload) {
-      state.form = payload;
+      state.formData = payload;
+    },
+    setFormattedFormData(state, payload) {
+      state.formattedFormData = payload;
+    },
+    setCreditCardType(state, payload) {
+      state.creditCardType = payload;
+    },
+    setCreditCardFormat(state, payload) {
+      state.creditCardFormat = payload;
     },
     setSubmitCreditCardDataLoading(state, payload) {
       state.isSubmitCreditCardDataLoading = payload;
@@ -50,6 +65,18 @@ export default new Vuex.Store({
 
     updateForm: ({ commit }, payload) => {
       commit("setFormData", payload);
+    },
+
+    updateFormattedForm: ({ commit }, payload) => {
+      commit("setFormattedFormData", payload);
+    },
+
+    updateCreditCardType: ({ commit }, payload) => {
+      commit("setCreditCardType", payload);
+    },
+
+    updateCreditCardFormat: ({ commit }, payload) => {
+      commit("setCreditCardFormat", payload);
     },
 
     submitCreditCardData: ({ commit }, payload) => {
