@@ -1,12 +1,13 @@
 import http from "../http-common";
-import { store } from "../store/store";
 
 class AppService {
-  addRecord(data) {
+  submitCreditCardData(data) {
     const config = {
-      headers: { Authorization: `Bearer ${store.state.token}` },
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
     };
-    return http.post("/api/records", data, config);
+    return http.post("/posts", data, config);
   }
 }
 

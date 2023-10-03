@@ -21,14 +21,20 @@
           class="credit-card-text font-weight-medium"
           style="position: absolute; font-size: 18px; top: 79px; left: 20px"
         >
+          <!-- {{ creditCardNumber }} -->
           {{ cardNumber }}
         </div>
-        <div
-          class="text-uppercase text-body-2 font-weight-medium credit-card-text"
-          style="position: absolute; bottom: 20px; left: 20px"
-        >
-          {{ fullName }}
-        </div>
+        <!-- <v-fade-transition hide-on-leave mode="out-in"> -->
+        <transition name="fade" mode="out-in">
+          <div
+            class="text-uppercase text-body-2 font-weight-medium credit-card-text"
+            style="position: absolute; bottom: 20px; left: 20px"
+            :key="fullName"
+          >
+            {{ fullName }}
+          </div>
+        </transition>
+        <!-- </v-fade-transition> -->
         <div
           class="d-flex flex-column justify-center align-center credit-card-text"
           style="position: absolute; bottom: 20px; left: 250px"
@@ -56,18 +62,81 @@
         </div>
       </div>
     </div>
+    <!-- <v-btn @click="animateTween"></v-btn> -->
+    <!-- <div class="mt-8">displayValue: {{ displayValue }}</div> -->
+    <!-- <div class="mt-8">myData.num: {{ myData.num }}</div>
+    <div class="mt-2">formattedNum: {{ formattedNum }}</div>
+    <v-btn @click="increaseNum"></v-btn> -->
   </v-container>
 </template>
 
 <script>
 import { eventBus } from "@/main";
+import gsap from "gsap";
+// import { TweenLite } from "gsap/gsap-core";
+
 export default {
   data: () => ({
     cardNumber: "1234 1234 1234 1234",
     expirationDate: "MM / YY",
     cvv: "123",
     fullName: "YOUR NAME",
+
+    // ccNumber: 0,
+    // ccNumberTweened: 0,
+
+    arr: [1, 2, 3],
+    testVal: 0,
+
+    // displayValue: this.value,
+    // tweenValue: this.value,
+    // displayValue: 0,
+    // tweenValue: 0,
+
+    myData: {
+      num: 0,
+      tweenedNum: 0,
+    },
   }),
+
+  methods: {
+    increaseNum() {
+      this.myData.num = this.myData.num + 10;
+    },
+    tween(newNumber) {
+      // console.log("tween: ", newNumber);
+      gsap.to(this.myData, {
+        duration: 0.2,
+        tweenedNum: newNumber,
+        // ease: "none",
+        // overwrite: "auto",
+      });
+    },
+  },
+
+  computed: {
+    formattedNum() {
+      return Math.round(this.myData.tweenedNum);
+    },
+  },
+
+  watch: {
+    myData: {
+      handler(newValue) {
+        // console.log(newValue, oldValue);
+        this.tween(newValue.num);
+      },
+      deep: true,
+    },
+    // value() {
+    //   gsap.to(this, {
+    //     tweenValue: this.value,
+    //     onUpdate: () => {
+    //       this.displayValue = Math.ceil(this.tweenValue);
+    //     },
+    //   });
+    // },
+  },
 
   created() {
     eventBus.$on("userForm", (data) => {
@@ -81,6 +150,10 @@ export default {
       const fullName = data.firstName + " " + data.lastName;
       this.fullName = fullName.length > 1 ? fullName : "YOUR NAME";
     });
+
+    // eventBus.$on("test", (data) => {
+    //   this.value = data;
+    // });
   },
 
   beforeDestroy() {
@@ -95,7 +168,7 @@ export default {
 }
 .credit-cards-container {
   position: relative;
-  margin-left: 48px;
+  /* margin-left: 48px; */
 }
 
 .credit-card {
@@ -128,5 +201,14 @@ export default {
 
 .credit-card-text {
   color: #ffffff;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+.fade-enter,
+.fade-lave-to {
+  opacity: 0;
 }
 </style>

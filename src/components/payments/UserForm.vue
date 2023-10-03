@@ -16,14 +16,18 @@
             @keydown="isNumber($event)"
           >
             <template #append v-if="creditCardType !== 'other'">
-              <div style="width: 32px">
-                <v-img
-                  style="margin: auto 0"
-                  max-height="24"
-                  max-width="32"
-                  :src="require(`../../assets/${creditCardType}.png`)"
-                />
-              </div>
+              <!-- <transition name="fade" mode="out-in"> -->
+              <v-fade-transition hide-on-leave mode="out-in">
+                <div style="width: 32px">
+                  <v-img
+                    style="margin: auto 0"
+                    max-height="24"
+                    max-width="32"
+                    :src="require(`../../assets/${creditCardType}.png`)"
+                  />
+                </div>
+              </v-fade-transition>
+              <!-- </transition> -->
             </template>
           </v-text-field>
           <v-tooltip top>
@@ -190,22 +194,32 @@
         </v-col>
       </v-row>
 
-      <v-row class="mt-8">
-        <v-btn
-          color="kinTeal"
-          @click="submitCreditCardData"
-          :disabled="
-            formHasErrors ||
-            !cardNumber ||
-            !expirationDate ||
-            !cvv ||
-            !firstName ||
-            !lastName ||
-            !zipCode
-          "
-          style="color: #ffffff"
-          ><v-icon left> mdi-lock-outline </v-icon> Submit</v-btn
-        >
+      <v-row class="mt-6">
+        <v-col cols="12" sm="12">
+          <v-btn
+            :block="$vuetify.breakpoint.xsOnly"
+            color="kinTeal"
+            @click="submitCreditCardData"
+            :disabled="
+              formHasErrors ||
+              !cardNumber ||
+              !expirationDate ||
+              !cvv ||
+              !firstName ||
+              !lastName ||
+              !zipCode ||
+              $store.getters.isSubmitCreditCardDataLoading
+            "
+            style="color: #ffffff"
+          >
+            <span v-if="!$store.getters.isSubmitCreditCardDataLoading">
+              <v-icon left> mdi-lock-outline </v-icon> Submit
+            </span>
+            <span v-if="$store.getters.isSubmitCreditCardDataLoading">
+              <v-icon left> mdi-lock-outline </v-icon> Submitting...
+            </span>
+          </v-btn>
+        </v-col>
       </v-row>
     </v-form>
   </v-container>
@@ -270,6 +284,7 @@ export default {
 
   watch: {
     form() {
+      this.$store.dispatch("updateForm", this.form);
       eventBus.$emit("userForm", this.formattedForm);
 
       this.formHasErrors = false;
@@ -290,9 +305,7 @@ export default {
 
     cardNumber(cardNumber) {
       const input = cardNumber.replace(/\D/g, "").substring(0, 16);
-      if (input.length) {
-        this.detectCardType(cardNumber);
-      }
+      this.detectCardType(cardNumber);
       this.formatCreditCardNumber(input);
     },
 
@@ -453,7 +466,6 @@ export default {
         bEven = !bEven;
       }
 
-      // console.log("luhnAlgorithm: ", nCheck % 10 == 0);
       return nCheck % 10 == 0 || "Credit card number is not valid";
     },
 
@@ -552,30 +564,30 @@ export default {
     //   return "Unknown";
     // },
 
-    detectCardType3(value) {
-      if (/^3[47]\d{0,13}$/.test(value)) {
-        console.log("detectCardType2: amex");
-        // mask = "9999 999999 99999";
-      } else if (/^\d{0,16}$/.test(value)) {
-        // console.log("detectCardType2: not amex");
-        // mask = "9999 9999 9999 9999";
-        if (/^4[0-9]{12}(?:[0-9]{3})?$/.test(value)) {
-          console.log("detectCardType2: VISA");
-        } else if (
-          /^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$/.test(
-            value
-          )
-        ) {
-          console.log("detectCardType2: MasterCard");
-        } else if (/^6(?:011|5[0-9]{2})[0-9]{12}$/.test(value)) {
-          console.log("detectCardType2: Discover");
-        } else if (/^(?:2131|1800|35\d{3})\d{11}$/.test(value)) {
-          console.log("detectCardType2: JCB");
-        } else {
-          console.log("detectCardType2: UNKNOWN");
-        }
-      }
-    },
+    // detectCardType3(value) {
+    //   if (/^3[47]\d{0,13}$/.test(value)) {
+    //     console.log("detectCardType2: amex");
+    //     // mask = "9999 999999 99999";
+    //   } else if (/^\d{0,16}$/.test(value)) {
+    //     // console.log("detectCardType2: not amex");
+    //     // mask = "9999 9999 9999 9999";
+    //     if (/^4[0-9]{12}(?:[0-9]{3})?$/.test(value)) {
+    //       console.log("detectCardType2: VISA");
+    //     } else if (
+    //       /^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$/.test(
+    //         value
+    //       )
+    //     ) {
+    //       console.log("detectCardType2: MasterCard");
+    //     } else if (/^6(?:011|5[0-9]{2})[0-9]{12}$/.test(value)) {
+    //       console.log("detectCardType2: Discover");
+    //     } else if (/^(?:2131|1800|35\d{3})\d{11}$/.test(value)) {
+    //       console.log("detectCardType2: JCB");
+    //     } else {
+    //       console.log("detectCardType2: UNKNOWN");
+    //     }
+    //   }
+    // },
 
     // Visa: ^4[0-9]{12}(?:[0-9]{3})?$ All Visa card numbers start with a 4. New cards have 16 digits. Old cards have 13.
     // MasterCard: ^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$ MasterCard numbers either start with the numbers 51 through 55 or with the numbers 2221 through 2720. All have 16 digits.
@@ -601,22 +613,29 @@ export default {
     //     };
     // }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9])),
 
-    submitCreditCardData() {},
+    resetForm() {
+      this.cardNumber = "";
+      this.expirationDate = "";
+      this.cvv = "";
+      this.firstName = "";
+      this.lastName = "";
+      this.zipCode = "";
+    },
+
+    submitCreditCardData() {
+      this.$store.dispatch("submitCreditCardData", this.form);
+    },
   },
 };
 </script>
 
 <style scoped>
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-  display: none;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-out;
 }
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
+.fade-enter,
+.fade-lave-to {
+  opacity: 0;
 }
 </style>

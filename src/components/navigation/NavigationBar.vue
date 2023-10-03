@@ -4,7 +4,7 @@
 
     <v-spacer></v-spacer>
 
-    <v-tooltip bottom>
+    <v-tooltip left>
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="mr-2"
