@@ -9,24 +9,20 @@
   the PaymentError component at the bottom of this view. -->
   <v-container class="d-flex flex-column justify-center align-center mt-8">
     <v-fade-transition hide-on-leave mode="out-in">
-      <CreditCards
-        v-show="!$store.getters.isSubmitCreditCardDataSuccess"
-        class="mb-12"
-      />
+      <CreditCards v-show="!isSubmitCreditCardDataSuccess" class="mb-12" />
     </v-fade-transition>
     <v-fade-transition hide-on-leave mode="out-in">
-      <UserForm v-show="!$store.getters.isSubmitCreditCardDataSuccess" />
+      <UserForm v-show="!isSubmitCreditCardDataSuccess" />
     </v-fade-transition>
     <v-fade-transition hide-on-leave mode="out-in">
-      <PaymentConfirmation
-        v-if="$store.getters.isSubmitCreditCardDataSuccess"
-      />
+      <PaymentConfirmation v-if="isSubmitCreditCardDataSuccess" />
     </v-fade-transition>
-    <PaymentError v-if="$store.getters.isSubmitCreditCardDataError" />
+    <PaymentError v-if="isSubmitCreditCardDataError" />
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import CreditCards from "./CreditCards";
 import UserForm from "./UserForm";
 import PaymentConfirmation from "./PaymentConfirmation";
@@ -38,6 +34,13 @@ export default {
     UserForm,
     PaymentConfirmation,
     PaymentError,
+  },
+
+  computed: {
+    ...mapGetters([
+      "isSubmitCreditCardDataSuccess",
+      "isSubmitCreditCardDataError",
+    ]),
   },
 };
 </script>

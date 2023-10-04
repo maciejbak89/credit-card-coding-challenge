@@ -17,15 +17,15 @@
         in the UserForm component to signal to the user that various credit card types are accepted and to reassure them that
         their credit card type is accepted here as well. -->
         <v-img
-          v-if="$store.getters.getCreditCardType !== 'other'"
+          v-if="getCreditCardType !== 'other'"
           alt="Logo of the credit card type being used by cardholder"
           class="credit-card-logo"
-          :src="require(`../../assets/${$store.getters.getCreditCardType}.png`)"
+          :src="require(`../../assets/${getCreditCardType}.png`)"
           height="24"
           width="32"
         />
         <div class="credit-card-text credit-card-numbers font-weight-medium">
-          <div v-if="$store.getters.getCreditCardFormat === 1">
+          <div v-if="getCreditCardFormat === 1">
             <span>{{ formattedOne }}</span>
             <span>{{ formattedTwo }}</span>
             <span>{{ formattedThree }}</span>
@@ -43,7 +43,7 @@
             <span>{{ formattedFifteen }}</span>
             <span>{{ formattedSixteen }}</span>
           </div>
-          <div v-if="$store.getters.getCreditCardFormat === 2">
+          <div v-if="getCreditCardFormat === 2">
             <span>{{ formattedOne }}</span>
             <span>{{ formattedTwo }}</span>
             <span>{{ formattedThree }}</span>
@@ -103,6 +103,7 @@
 
 <script>
 import gsap from "gsap";
+import { mapGetters } from "vuex";
 
 export default {
   data: () => ({
@@ -186,10 +187,11 @@ export default {
   },
 
   computed: {
+    ...mapGetters(["getFormData", "getCreditCardType", "getCreditCardFormat"]),
     formattedOne() {
       return Math.round(this.one.tweenedNum)
         ? Math.round(this.one.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(0, 1)
+        : this.getFormData.cardNumber.substring(0, 1)
         ? 0
         : "";
       // Double ternary operator is used for credit card numbers that are equal to 0
@@ -198,105 +200,105 @@ export default {
     formattedTwo() {
       return Math.round(this.two.tweenedNum)
         ? Math.round(this.two.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(1, 2)
+        : this.getFormData.cardNumber.substring(1, 2)
         ? 0
         : "";
     },
     formattedThree() {
       return Math.round(this.three.tweenedNum)
         ? Math.round(this.three.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(2, 3)
+        : this.getFormData.cardNumber.substring(2, 3)
         ? 0
         : "";
     },
     formattedFour() {
       return Math.round(this.four.tweenedNum)
         ? Math.round(this.four.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(3, 4)
+        : this.getFormData.cardNumber.substring(3, 4)
         ? 0
         : "";
     },
     formattedFive() {
       return Math.round(this.five.tweenedNum)
         ? Math.round(this.five.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(4, 5)
+        : this.getFormData.cardNumber.substring(4, 5)
         ? 0
         : "";
     },
     formattedSix() {
       return Math.round(this.six.tweenedNum)
         ? Math.round(this.six.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(5, 6)
+        : this.getFormData.cardNumber.substring(5, 6)
         ? 0
         : "";
     },
     formattedSeven() {
       return Math.round(this.seven.tweenedNum)
         ? Math.round(this.seven.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(6, 7)
+        : this.getFormData.cardNumber.substring(6, 7)
         ? 0
         : "";
     },
     formattedEight() {
       return Math.round(this.eight.tweenedNum)
         ? Math.round(this.eight.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(7, 8)
+        : this.getFormData.cardNumber.substring(7, 8)
         ? 0
         : "";
     },
     formattedNine() {
       return Math.round(this.nine.tweenedNum)
         ? Math.round(this.nine.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(8, 9)
+        : this.getFormData.cardNumber.substring(8, 9)
         ? 0
         : "";
     },
     formattedTen() {
       return Math.round(this.ten.tweenedNum)
         ? Math.round(this.ten.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(9, 10)
+        : this.getFormData.cardNumber.substring(9, 10)
         ? 0
         : "";
     },
     formattedEleven() {
       return Math.round(this.eleven.tweenedNum)
         ? Math.round(this.eleven.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(10, 11)
+        : this.getFormData.cardNumber.substring(10, 11)
         ? 0
         : "";
     },
     formattedTwelve() {
       return Math.round(this.twelve.tweenedNum)
         ? Math.round(this.twelve.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(11, 12)
+        : this.getFormData.cardNumber.substring(11, 12)
         ? 0
         : "";
     },
     formattedThirteen() {
       return Math.round(this.thirteen.tweenedNum)
         ? Math.round(this.thirteen.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(12, 13)
+        : this.getFormData.cardNumber.substring(12, 13)
         ? 0
         : "";
     },
     formattedFourteen() {
       return Math.round(this.fourteen.tweenedNum)
         ? Math.round(this.fourteen.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(13, 14)
+        : this.getFormData.cardNumber.substring(13, 14)
         ? 0
         : "";
     },
     formattedFifteen() {
       return Math.round(this.fifteen.tweenedNum)
         ? Math.round(this.fifteen.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(14, 15)
+        : this.getFormData.cardNumber.substring(14, 15)
         ? 0
         : "";
     },
     formattedSixteen() {
       return Math.round(this.sixteen.tweenedNum)
         ? Math.round(this.sixteen.tweenedNum)
-        : this.$store.getters.getFormData.cardNumber.substring(15, 16)
+        : this.getFormData.cardNumber.substring(15, 16)
         ? 0
         : "";
     },
@@ -306,54 +308,22 @@ export default {
     // Grab each number separately from the Vuex state of formData to achieve an individual
     // tween animation for each credit card number:
     "$store.getters.getFormData"() {
-      this.one.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(0, 1)
-      );
-      this.two.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(1, 2)
-      );
-      this.three.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(2, 3)
-      );
-      this.four.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(3, 4)
-      );
-      this.five.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(4, 5)
-      );
-      this.six.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(5, 6)
-      );
-      this.seven.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(6, 7)
-      );
-      this.eight.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(7, 8)
-      );
-      this.nine.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(8, 9)
-      );
-      this.ten.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(9, 10)
-      );
-      this.eleven.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(10, 11)
-      );
-      this.twelve.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(11, 12)
-      );
-      this.thirteen.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(12, 13)
-      );
-      this.fourteen.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(13, 14)
-      );
-      this.fifteen.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(14, 15)
-      );
-      this.sixteen.num = Number(
-        this.$store.getters.getFormData.cardNumber.substring(15, 16)
-      );
+      this.one.num = Number(this.getFormData.cardNumber.substring(0, 1));
+      this.two.num = Number(this.getFormData.cardNumber.substring(1, 2));
+      this.three.num = Number(this.getFormData.cardNumber.substring(2, 3));
+      this.four.num = Number(this.getFormData.cardNumber.substring(3, 4));
+      this.five.num = Number(this.getFormData.cardNumber.substring(4, 5));
+      this.six.num = Number(this.getFormData.cardNumber.substring(5, 6));
+      this.seven.num = Number(this.getFormData.cardNumber.substring(6, 7));
+      this.eight.num = Number(this.getFormData.cardNumber.substring(7, 8));
+      this.nine.num = Number(this.getFormData.cardNumber.substring(8, 9));
+      this.ten.num = Number(this.getFormData.cardNumber.substring(9, 10));
+      this.eleven.num = Number(this.getFormData.cardNumber.substring(10, 11));
+      this.twelve.num = Number(this.getFormData.cardNumber.substring(11, 12));
+      this.thirteen.num = Number(this.getFormData.cardNumber.substring(12, 13));
+      this.fourteen.num = Number(this.getFormData.cardNumber.substring(13, 14));
+      this.fifteen.num = Number(this.getFormData.cardNumber.substring(14, 15));
+      this.sixteen.num = Number(this.getFormData.cardNumber.substring(15, 16));
     },
 
     // Listen to changes in the Vuex state for the formattedFormData property and update the values on the

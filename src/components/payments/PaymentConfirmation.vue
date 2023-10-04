@@ -11,7 +11,7 @@
         >
         <div class="text-h4 text-center">
           Thank you for your payment<span
-            >, {{ $store.getters.getSubmissionResponse.firstName }}</span
+            >, {{ getSubmissionResponse.firstName }}</span
           >!
         </div>
       </v-col>
@@ -27,9 +27,7 @@
         <!-- The ID from the endpoint response is displayed here: -->
         <div class="mb-1">
           Your payment ID is:
-          <span class="font-weight-bold">{{
-            $store.getters.getSubmissionResponse.id
-          }}</span>
+          <span class="font-weight-bold">{{ getSubmissionResponse.id }}</span>
         </div>
         <div>
           Your transaction number is:
@@ -38,9 +36,10 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" sm="12">
         <v-btn
           dark
+          :block="$vuetify.breakpoint.xsOnly"
           color="kinTeal"
           elevation="0"
           @click="returnHome"
@@ -49,19 +48,20 @@
         >
       </v-col>
     </v-row>
-    <v-divider></v-divider>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data: () => ({
     randomTransaction: Math.floor(Math.random() * 100000000),
   }),
   computed: {
+    ...mapGetters(["getSubmissionResponse"]),
     lastFour() {
-      return this.$store.getters.getSubmissionResponse.cardNumber
-        ? this.$store.getters.getSubmissionResponse.cardNumber.substring(12, 16)
+      return this.getSubmissionResponse.cardNumber
+        ? this.getSubmissionResponse.cardNumber.substring(12, 16)
         : "";
     },
   },
