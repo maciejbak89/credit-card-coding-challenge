@@ -4,16 +4,19 @@
 
     <v-spacer></v-spacer>
 
-    <v-tooltip left>
+    <!-- I thought a cool addition to this app would be a dark theme: -->
+    <v-tooltip left role="tooltip">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
+          aria-label="Click to toggle light and dark theme of this application"
+          aria-describedby
           class="mr-2"
           icon
           @click="toggleLightDarkTheme"
           v-bind="attrs"
           v-on="on"
         >
-          <v-icon>mdi-invert-colors</v-icon>
+          <v-icon aria-label="Invert colors">mdi-invert-colors</v-icon>
         </v-btn>
       </template>
       <span v-if="!$vuetify.theme.isDark">Switch to Dark Mode</span>
