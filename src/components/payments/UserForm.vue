@@ -12,7 +12,10 @@
           method of validation proves to be the most successful with users and saves them the most time.
           I updated the design of the placeholder text to reflect type=number (instead of having X's which are letters). Having a 
           placeholder of numbers only requires less of a cognitive load from the user and signals to the user right away that the values
-          entered can only be numbers. -->
+          entered can only be numbers. Another very interesting read on the pros & cons of placeholders in form fields in general is in 
+          this Nielsen Norman Group article (https://www.nngroup.com/articles/form-design-placeholders/).
+          This page was also tested for accessibility with WAVE Web Accessibility Evaluation Tools for any errors, contrast errors, missing
+          elements, aria tags, etc. -->
           <v-text-field
             ref="cardNumber"
             aria-label="Enter your credit card number here"
