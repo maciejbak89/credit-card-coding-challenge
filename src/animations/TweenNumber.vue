@@ -42,7 +42,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getFormData", "getCreditCardType", "getCreditCardFormat"]),
+    ...mapGetters(["getFormData"]),
     formattedNum() {
       return Math.round(this.number.tweenedNum)
         ? Math.round(this.number.tweenedNum)

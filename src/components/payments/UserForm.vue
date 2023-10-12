@@ -266,7 +266,6 @@
           <v-btn
             aria-label="Click to submit credit card data"
             class="user-form-text-white"
-            :block="$vuetify.breakpoint.xsOnly"
             color="kinTeal"
             @click="submitCardData"
             :disabled="

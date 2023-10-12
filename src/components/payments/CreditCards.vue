@@ -61,7 +61,9 @@
           height="186"
           width="328"
         />
-        <div class="credit-card-text credit-card-cvv">
+        <div
+          class="d-flex flex-column justify-center align-center credit-card-text credit-card-cvv"
+        >
           <div class="text-caption">CVV</div>
           <v-fade-transition mode="out-in">
             <div class="text-body-2 font-weight-medium" :key="cvv">
